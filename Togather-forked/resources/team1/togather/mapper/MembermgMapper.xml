@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team1.togather.mapper.MembermgMapper">
+
+    <!-- 회원목록 리스트 -->
+    <select id="mmlistPageCri" resultType="Member" parameterType="MembermgCriteria">
+      <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from MEMBER order by mnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+   </select>
+    <!-- 총 페이지 카운트 -->
+    <select id="mmpageCount" resultType="Integer">
+        select count(*) from MEMBER
+    </select>
+    <!-- 회원번호 리스트 -->
+    <select id="selectmnum" resultType="Member" parameterType="long">
+        select * from MEMBER where MNUM=#{mnum}
+    </select>
+    <!-- 회원권한 수정 -->
+    <update id="mmupdate" parameterType="Member">
+        update MEMBER set ATHUR=#{athur} where MNUM=#{mnum}
+    </update>
+    <!-- 회원 제명 -->
+    <delete id="mmdelete" parameterType="long">
+        delete from MEMBER where MNUM=#{mnum}
+    </delete>
+    <!-- 회원 검색 -->
+    <select id="getMembermgBySearch" parameterType="Map" resultType="Member">
+       <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from MEMBER where ${option} like '%'||#{membermgSearch}||'%'  order by mnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+    </select>
+
+    <!-- 각 회원 모임게시판 작성 글 조회  등 -->
+
+    <!-- 작성한 모임게시판 리스트 -->
+    <select id="MmGbListPageCri" resultType="GBoard" parameterType="MmGbCriteria">
+      <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from GROUPTAB_BOARD where mnum=#{mnum} order by gbnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+   </select>
+    <!-- 작성한 모임게시판 총 페이지 -->
+    <select id="MmGbPageCount" resultType="Integer" parameterType="long">
+        select count(*) from GROUPTAB_BOARD where MNUM=#{mnum}
+    </select>
+    <!-- 작성한 모임게시판 검색 -->
+    <select id="getMmGbBySearch" parameterType="Map" resultType="GBoard">
+       <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from GROUPTAB_BOARD where ${option} like '%'||#{MmGbSearch}||'%' and mnum=#{mnum}  order by gbnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+    </select>
+
+    <!-- 각 회원 모임게시판 댓글글 조회  -->
+
+    <!-- 작성한 모임게시판 댓글 리스트 -->
+    <select id="MmGbRListPageCri" resultType="GBReply" parameterType="MmGbRCriteria">
+      <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from GBREPLY where mnum=#{mnum} order by gbrseq desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+   </select>
+    <!-- 작성한 모임게시판 댓글 총 페이지 -->
+    <select id="MmGbRPageCount" resultType="Integer" parameterType="long">
+        select count(*) from GBREPLY where MNUM=#{mnum}
+    </select>
+    <!-- 작성한 모임게시판 댓글 검색 -->
+    <select id="getMmGbRBySearch" parameterType="Map" resultType="GBReply">
+       <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from GBReply where ${option} like '%'||#{MmGbRSearch}||'%' and mnum=#{mnum}  order by gbrseq desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+    </select>
+</mapper>

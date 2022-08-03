@@ -1,0 +1,13 @@
+.DS_Store
+
+webapp/WEB-INF/spring/root-context.xml
+resources/application.properties
+resources/log4jdbc.log4j2.properties
+resources/logback.xml
+webapp/META-INF
+webapp/WEB-INF/classes
+webapp/WEB-INF/spring
+webapp/WEB-INF/web.xml
+node_modules
+package-lock.json
+package.json
