@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team1.togather.mapper.MembermgMapper">
+
+
+    <select id="mmlistPageCri" resultType="Member" parameterType="MembermgCriteria">
+      <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from MEMBER order by mnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+   </select>
+    <select id="mmpageCount" resultType="Integer">
+        select count(*) from MEMBER
+    </select>
+
+    <select id="selectmnum" resultType="Member" parameterType="long">
+        select * from MEMBER where MNUM=#{mnum}
+    </select>
+
+    <update id="mmupdate" parameterType="Member">
+        update MEMBER set ATHUR=#{athur} where MNUM=#{mnum}
+    </update>
+    <delete id="mmdelete" parameterType="long">
+        delete from MEMBER where MNUM=#{mnum}
+    </delete>
+
+    <select id="getMembermgBySearch" parameterType="Map" resultType="Member">
+       <![CDATA[
+        select * from (select ROWNUM rnum, aa.* from (select * from MEMBER where ${option} like '%'||#{membermgSearch}||'%'  order by mnum desc) aa)
+        where rnum>#{startRow} and rnum<=#{endRow}
+        ]]>
+    </select>
+</mapper>
